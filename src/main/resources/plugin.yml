@@ -1,0 +1,17 @@
+name: AfkPlus
+version: ${project.version}
+main: org.elliotnash.elliotnash
+api-version: 1.16
+authors: [Elliot]
+description: Afk
+website: elliotnash.org
+commands:
+  afk:
+    description: Set afk status
+    usage: /afk
+    permission: afk.self
+permissions:
+  afk.self:
+    default: not op
+  afk.other:
+    default: op

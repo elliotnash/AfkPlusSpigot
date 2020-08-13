@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,7 +20,7 @@ public class BukkitTasks extends BukkitRunnable {
 
     private int counter;
 
-    public HashMap<UUID, Pair<Location, Boolean>> playerCache;
+    public HashMap<UUID, Pair<Block, Boolean>> playerCache = new HashMap<>();
 
     public BukkitTasks(JavaPlugin plugin, int counter) {
         this.plugin = plugin;
@@ -33,19 +34,24 @@ public class BukkitTasks extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player: Bukkit.getOnlinePlayers()){
-            if (player.getLocation()==playerCache.get(player.getUniqueId()).getKey()){
-                //runs if player has stayed in same location
-                if (!playerCache.get(player.getUniqueId()).getValue()){
-                    playerCache.put(player.getUniqueId(), new Pair<Location, Boolean>(player.getLocation(), true));
-                    //player is not afk, afk them
-                    Bukkit.broadcastMessage(ChatColor.RED+player.getName()+ChatColor.GOLD+" is now afk");
+            if (playerCache.containsKey(player.getUniqueId())) {
+                if (player.getLocation().getBlock().toString().equals( playerCache.get(player.getUniqueId()).getKey().toString()) ) {
+                    //runs if player has stayed in same location
+                    if (!playerCache.get(player.getUniqueId()).getValue()) {
+                        playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), true));
+                        //player is not afk, afk them
+                        Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.GOLD + " is now afk");
+                    }
+                } else {
+                    if (playerCache.get(player.getUniqueId()).getValue()) {
+                        //player is afk but just moved
+                        playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), false));
+                        Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.GOLD + " is no longer afk");
+                    }
                 }
             } else {
-                if (playerCache.get(player.getUniqueId()).getValue()){
-                    //player is afk but just moved
-                    playerCache.put(player.getUniqueId(), new Pair<Location, Boolean>(player.getLocation(), false));
-                    Bukkit.broadcastMessage(ChatColor.RED+player.getName()+ChatColor.GOLD+" is now afk");
-                }
+
+                playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), false));
             }
         }
     }

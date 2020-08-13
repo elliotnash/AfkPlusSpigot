@@ -1,6 +1,6 @@
 name: AfkPlus
 version: ${project.version}
-main: org.elliotnash.elliotnash
+main: org.elliotnash.Main
 api-version: 1.16
 authors: [Elliot]
 description: Afk

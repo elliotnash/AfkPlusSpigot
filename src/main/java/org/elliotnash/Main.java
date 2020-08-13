@@ -10,7 +10,7 @@ public final class Main extends JavaPlugin {
         //this.getCommand("kit").setExecutor(new AfkCommand());
 
         //schedule task to be run every x ticks
-        BukkitTask task = new BukkitTasks(this, 5).runTaskTimer(this, (20*10), (20*10));
+        BukkitTask task = new BukkitTasks(this, 5).runTaskTimer(this, (20*10), (20*30));
 
     }
 

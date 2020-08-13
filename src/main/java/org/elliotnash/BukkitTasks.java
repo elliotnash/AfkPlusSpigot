@@ -34,25 +34,23 @@ public class BukkitTasks extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player: Bukkit.getOnlinePlayers()){
+            boolean isAfk=false;
             if (playerCache.containsKey(player.getUniqueId())) {
                 if (player.getLocation().getBlock().toString().equals( playerCache.get(player.getUniqueId()).getKey().toString()) ) {
                     //runs if player has stayed in same location
+                    isAfk=true;
                     if (!playerCache.get(player.getUniqueId()).getValue()) {
-                        playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), true));
                         //player is not afk, afk them
                         Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.GOLD + " is now afk");
                     }
                 } else {
                     if (playerCache.get(player.getUniqueId()).getValue()) {
                         //player is afk but just moved
-                        playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), false));
                         Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.GOLD + " is no longer afk");
                     }
                 }
-            } else {
-
-                playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), false));
             }
+            playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), isAfk));
         }
     }
 

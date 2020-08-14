@@ -20,7 +20,9 @@ public class BukkitTasks extends BukkitRunnable {
 
     private int counter;
 
-    public HashMap<UUID, Pair<Block, Boolean>> playerCache = new HashMap<>();
+    private final int repeatCounter = 8;
+
+    public HashMap<UUID, Pair<Block, Integer>> playerCache = new HashMap<>();
 
     public BukkitTasks(JavaPlugin plugin, int counter) {
         this.plugin = plugin;
@@ -34,23 +36,28 @@ public class BukkitTasks extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player: Bukkit.getOnlinePlayers()){
-            boolean isAfk=false;
+            int afkAmount=0;
             if (playerCache.containsKey(player.getUniqueId())) {
                 if (player.getLocation().getBlock().toString().equals( playerCache.get(player.getUniqueId()).getKey().toString()) ) {
                     //runs if player has stayed in same location
-                    isAfk=true;
-                    if (!playerCache.get(player.getUniqueId()).getValue()) {
+                    if (repeatCounter>playerCache.get(player.getUniqueId()).getValue()) {
+                        afkAmount = playerCache.get(player.getUniqueId()).getValue() + 1;
+                        //player hasn't moved, but not for as long as necessary
+                    } else if (repeatCounter==playerCache.get(player.getUniqueId()).getValue()){
                         //player is not afk, afk them
                         Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.GOLD + " is now afk");
+                        afkAmount=repeatCounter+1;
+                    } else{
+                        afkAmount=repeatCounter+1;
                     }
                 } else {
-                    if (playerCache.get(player.getUniqueId()).getValue()) {
+                    if (repeatCounter<=playerCache.get(player.getUniqueId()).getValue()) {
                         //player is afk but just moved
                         Bukkit.broadcastMessage(ChatColor.RED + player.getName() + ChatColor.GOLD + " is no longer afk");
                     }
                 }
             }
-            playerCache.put(player.getUniqueId(), new Pair<Block, Boolean>(player.getLocation().getBlock(), isAfk));
+            playerCache.put(player.getUniqueId(), new Pair<Block, Integer>(player.getLocation().getBlock(), afkAmount));
         }
     }
 

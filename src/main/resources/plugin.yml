@@ -9,9 +9,9 @@ commands:
   afk:
     description: Set afk status
     usage: /afk
-    permission: afk.self
+    permission: afk.list
 permissions:
-  afk.self:
-    default: not op
+  afk.list:
+    default: true
   afk.other:
     default: op

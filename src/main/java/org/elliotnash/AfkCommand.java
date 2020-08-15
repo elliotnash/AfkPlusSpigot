@@ -28,7 +28,7 @@ public class AfkCommand implements CommandExecutor {
             }
         }
         //remove final ", "
-        if (playersBuilder.charAt(playersBuilder.length()-2)==','){
+        if (playersBuilder.length()>0){
             playersBuilder.delete(playersBuilder.length()-2, playersBuilder.length()-1);
             sender.sendMessage(ChatColor.RED+"The following players are afk:");
             sender.sendMessage(ChatColor.GOLD+playersBuilder.toString());

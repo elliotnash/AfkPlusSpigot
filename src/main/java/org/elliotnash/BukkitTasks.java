@@ -20,9 +20,9 @@ public class BukkitTasks extends BukkitRunnable {
 
     private int counter;
 
-    private final int repeatCounter = 8;
+    public static final int repeatCounter = 8;
 
-    public HashMap<UUID, Pair<Block, Integer>> playerCache = new HashMap<>();
+    public static HashMap<UUID, Pair<Block, Integer>> playerCache = new HashMap<>();
 
     public BukkitTasks(JavaPlugin plugin, int counter) {
         this.plugin = plugin;

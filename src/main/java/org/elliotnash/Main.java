@@ -7,7 +7,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //this.getCommand("kit").setExecutor(new AfkCommand());
+        this.getCommand("afk").setExecutor(new AfkCommand());
 
         //schedule task to be run every x ticks
         BukkitTask task = new BukkitTasks(this, 5).runTaskTimer(this, (20*2), (20*2));
